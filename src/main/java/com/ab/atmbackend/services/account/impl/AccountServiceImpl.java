@@ -1,7 +1,5 @@
 package com.ab.atmbackend.services.account.impl;
 
-import com.ab.atmbackend.bootstrap.BootStrapData;
-import com.ab.atmbackend.exception.ResourceNotFoundException;
 import com.ab.atmbackend.model.Account;
 import com.ab.atmbackend.repository.AccountRepository;
 import com.ab.atmbackend.services.account.AccountService;
@@ -45,7 +43,7 @@ public class AccountServiceImpl implements AccountService {
 
         if (verifyUser(accountNumber, pin) && account != null) {
             message.append("There are ").append(account.getBalance()).append(" Euro in your acount.");
-            if (Integer.parseInt(account.getBalance()) > Integer.parseInt(env.getProperty(maximum_withdrawal_amount))) {
+            if (account.getBalance() > Integer.parseInt(env.getProperty(maximum_withdrawal_amount))) {
                 message.append(" You can get maximum : ").append(env.getProperty(maximum_withdrawal_amount)).append(" Euro a day!");
             }
         } else {
@@ -76,16 +74,16 @@ public class AccountServiceImpl implements AccountService {
         } else {
             if (Integer.parseInt(withDrawnAmount) > Integer.parseInt(env.getProperty(maximum_withdrawal_amount))) {
                 message.append("You cannot exceed the daily withdrawal limit! The daily limit is :").append(env.getProperty(maximum_withdrawal_amount)).append(" Euros!");
-            } else if (Integer.parseInt(withDrawnAmount) > (Integer.parseInt(account.getBalance()) + Integer.parseInt(account.getOverdraft()))) {
-                message.append("Insufficient balance! Your available limit is : ").append(Integer.parseInt(account.getBalance()) + Integer.parseInt(account.getOverdraft())).append(" Euros.");
-            } else if (Integer.parseInt(withDrawnAmount) <= Integer.parseInt(account.getBalance()) + Integer.parseInt(account.getOverdraft())) {
-                message.append("You withdraw ").append(withDrawnAmount).append(" Euros.").append(" Your remaining money is : ").append(Integer.parseInt(account.getBalance()) - Integer.parseInt(withDrawnAmount)).append(" Euros.").append("\n");
+            } else if (Integer.parseInt(withDrawnAmount) > (account.getBalance() + account.getOverdraft())) {
+                message.append("Insufficient balance! Your available limit is : ").append(account.getBalance() + account.getOverdraft()).append(" Euros.");
+            } else if (Integer.parseInt(withDrawnAmount) <= account.getBalance() + account.getOverdraft()) {
+                message.append("You withdraw ").append(withDrawnAmount).append(" Euros.").append(" Your remaining money is : ").append(account.getBalance() - Integer.parseInt(withDrawnAmount)).append(" Euros.").append("\n");
 
                 message.append(classifyMoneys(withDrawnAmount));
 
-                int availableBalance = Integer.parseInt(account.getBalance()) - Integer.parseInt(withDrawnAmount);
+                int availableBalance = account.getBalance() - Integer.parseInt(withDrawnAmount);
 
-                account.setBalance(String.valueOf(availableBalance));
+                account.setBalance(availableBalance);
                 accountRepository.save(account);
             }
         }

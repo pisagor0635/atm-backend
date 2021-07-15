@@ -22,14 +22,14 @@ public class Account {
     private String pin;
 
     @Column(name = "opening_balance")
-    private String openingBalance;
+    private int openingBalance;
 
     @Column(name = "balance")
     @ApiModelProperty(hidden = true)
-    private String balance;
+    private int balance;
 
     @Column(name = "overdraft")
-    private String overdraft;
+    private int overdraft;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -44,7 +44,7 @@ public class Account {
     public Account() {
     }
 
-    public Account(String accountNumber, String pin, String openingBalance, String overdraft) {
+    public Account(String accountNumber, String pin, int openingBalance, int overdraft) {
         this.accountNumber = accountNumber;
         this.pin = pin;
         this.openingBalance = openingBalance;
@@ -67,27 +67,27 @@ public class Account {
         this.pin = pin;
     }
 
-    public String getOpeningBalance() {
+    public int getOpeningBalance() {
         return openingBalance;
     }
 
-    public void setOpeningBalance(String openingBalance) {
+    public void setOpeningBalance(int openingBalance) {
         this.openingBalance = openingBalance;
     }
 
-    public String getBalance() {
+    public int getBalance() {
         return balance;
     }
 
-    public void setBalance(String balance) {
+    public void setBalance(int balance) {
         this.balance = balance;
     }
 
-    public String getOverdraft() {
+    public int getOverdraft() {
         return overdraft;
     }
 
-    public void setOverdraft(String overdraft) {
+    public void setOverdraft(int overdraft) {
         this.overdraft = overdraft;
     }
 }
